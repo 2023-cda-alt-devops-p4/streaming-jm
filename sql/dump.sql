@@ -76,6 +76,22 @@ CREATE TABLE
         FOREIGN KEY (id_user) REFERENCES user(id) ON DELETE CASCADE
     );
 
+
+--Procedure to retrieve the movies from a specific director
+DELIMITER //
+
+CREATE PROCEDURE moviefromdirector(IN directorname VARCHAR(150))
+  BEGIN
+    SELECT title 
+    FROM movie 
+    INNER JOIN director ON movie.id_director = director.id 
+    WHERE director.last_name = directorname;
+  END //
+
+
+DELIMITER ;
+
+-- Trigger to populate the archive table when changes occur to the user table
 DELIMITER //
 
 CREATE TRIGGER USER_ARCHIVE_TRIGGER 
