@@ -67,6 +67,10 @@ mysql -u [username] -p
 
 [Valider en appuyant sur la touche entrée et entrer le mot de passe]
 ```
+- Tester la procédure stockée
+```sql
+CALL moviefromdirector('Godard');
+```
 - les titres et dates de sortie des films du plus récent au plus ancien
 ```sql
 SELECT title, release_date 

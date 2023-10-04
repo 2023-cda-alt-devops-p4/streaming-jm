@@ -1,5 +1,7 @@
+-- Move current user to the streaming db
 USE streaming;
 
+-- Creation of the tables
 CREATE TABLE
     IF NOT EXISTS actor (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
