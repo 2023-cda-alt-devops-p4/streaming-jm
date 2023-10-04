@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.1
+    image: eromnoj/streaming-jm:latest
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: streaming
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - mysqlstorage:/var/lib/mysql
+      - mysqljmstorage:/var/lib/mysql
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     ports:
       - '${PORT}:3306'
 volumes:
-  mysqlstorage:
+  mysqljmstorage:
