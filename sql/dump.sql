@@ -79,7 +79,7 @@ CREATE TABLE
     );
 
 
---Procedure to retrieve the movies from a specific director
+-- Procedure to retrieve the movies from a specific director
 DELIMITER //
 
 CREATE PROCEDURE moviefromdirector(IN directorname VARCHAR(150))
