@@ -3,8 +3,20 @@
 ## Description
 Création d'un base donnée MySQL conteneurisée avec Docker, et administration de la base de donnée en suivant les instructions décrites dans le brief [Plateforme de streaming](https://github.com/2023-cda-alt-devops-p4/streaming).
 ## Procédures d'installation
-Modifier le fichier .env pour y définir le mot de passe root, le login et le mot de passe de l'utilisateur principal.
+Modifiez le fichier .env pour y définir le mot de passe root, le login et le mot de passe de l'utilisateur principal.
+Le port par défaut utilisé par MySQL est 3306, dans le cas où se port sera déjà utilisé, vous pouvez aussi le modifier dans le ficher .env pour utiliser un port libre.
 
+```conf
+# Set root password
+MYSQL_ROOT_PASSWORD=5up3RS7r0N9P4ssW0rD
+
+# Set user login and password
+MYSQL_USER=streaming_admin
+MYSQL_PASSWORD=5up3RS7r0N9P4ssW0rD4U5eR
+
+# Set output port in case default MySQL port is already taken. Default port is 3306
+PORT=3306
+```
 Le nom de la base de données est définie par défaut sur "streaming" dans le fichier Docker Compose.
 
 A la racine du projet exécuter la commande suivante pour lancer l'image
@@ -14,59 +26,24 @@ docker compose up -d
 ```
 Au premier lancement, un volume sera créé pour la persistance des données dans l'emplacement prévu par la configuration de Docker.
 
-## Exécuter les scripts SQL
+L'image utilisé est dérivé de l'image MySQL et est configurée pour créer les tables de la base de donnée, créer le Trigger et la procédure stockée, ainsi que de peupler la base de données avec des données de test.
 
-#### Dans le répertoire du projet
-Afin d'exécuter les scripts, récupérer d'abord l'ID du container docker
-```
-docker ps
-```
-Placer vous à la racine du projet et copier le script /sql/sump.sql à la racine de l'image Docker
-```
-docker cp ./sql/dump.sql [cotainer-id]:/dump.sql
-```
+Vous pouvez trouver l'image personnalisée sur ce repository [Docker Hub](https://hub.docker.com/repository/docker/eromnoj/streaming-jm/general)
+## Se connecter à la base
 
-Se connecter à la console de l'image
-```
-docker exec -it [container-id] /bin/bash
-```
+Connectez-vous à la base de donnée en utilisant un client SQL et le port que vous avez défini dans le fichier .env .
 
-Se connecter à la console MySQL à l'aide de l'utilisateur **root** (nécessaire pour créer le trigger) et du mot de passe définit dans les variables d'environnement
+Dans le cas d'une utilisation de MySQL en console, le protocole tcp doit être renseigné lors de la connexion
 
 ```bash
-mysql -u root -p
+mysql -h 127.0.0.1 -P [PORT] --protocol=tcp -u [MYSQL_USER] -p
 
-[Valider en appuyant sur la touche entrée et entrer le mot de passe]
-```
-
-#### Dans la console de MySQL
-
-Créer et peupler la base de données en utilisant la commande source
-```sql
-source dump.sql
-```
-
-Se déconnecter de la console mysql
-```sql
-exit
-```
-
-#### Se déconnecter du container
-```bash
-exit
 ```
 
 ## Requêtes de test
 
 Exemples de requêtes SQL pour tester la base de données.
 
-Pour les utiliser, se connecter à la base de donnée en utilisant le login et le mot de passe créé dans le ficher de variables d'environnement :
-
-```bash
-mysql -u [username] -p
-
-[Valider en appuyant sur la touche entrée et entrer le mot de passe]
-```
 - Tester la procédure stockée
 ```sql
 CALL moviefromdirector('Godard');
